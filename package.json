@@ -1,0 +1,79 @@
+{
+  "name": "@explita/utils",
+  "version": "0.1.0",
+  "author": "explita",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "description": "A lightweight and versatile collection of TypeScript utility functions designed for everyday development needs. Streamline your Node.js, React, and Next.js projects with a powerful set of well-organized helpers for strings, arrays, dates, objects, and more. Perfect for building efficient, modern applications with ease.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./zod": {
+      "types": "./dist/validation/zod/index.d.ts",
+      "default": "./dist/validation/zod/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
+    },
+    "./file": {
+      "types": "./dist/file/index.d.ts",
+      "default": "./dist/file/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "utility functions",
+    "TypeScript utilities",
+    "JavaScript utilities",
+    "common functions",
+    "helper functions",
+    "string utilities",
+    "array utilities",
+    "date utilities",
+    "object utilities",
+    "data validation",
+    "number utilities",
+    "npm utilities",
+    "React utilities",
+    "Next.js utilities",
+    "Node.js utilities",
+    "utility library",
+    "general purpose utilities",
+    "developer toolset",
+    "ES6 helpers",
+    "typescript helpers",
+    "npm package"
+  ],
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/react": "^19.2.3",
+    "axios": "^1.13.3",
+    "jest": "^29.7.0",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "axios": "^1",
+    "react": "^19",
+    "zod": "^4"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ]
+}
