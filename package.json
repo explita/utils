@@ -1,6 +1,6 @@
 {
   "name": "@explita/utils",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "explita",
   "license": "MIT",
   "type": "module",
@@ -25,12 +25,16 @@
     "./file": {
       "types": "./dist/file/index.d.ts",
       "default": "./dist/file/index.js"
+    },
+    "./axios": {
+      "types": "./dist/axios/index.d.ts",
+      "default": "./dist/axios/index.js"
     }
   },
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && tsc",
-    "test": "jest",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -58,6 +62,7 @@
   ],
   "devDependencies": {
     "@types/jest": "^29.5.14",
+    "@types/node": "^25.1.0",
     "@types/react": "^19.2.3",
     "axios": "^1.13.3",
     "jest": "^29.7.0",

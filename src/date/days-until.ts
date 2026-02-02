@@ -1,3 +1,4 @@
+import { startOfDay } from "./start-of-day.js";
 import { toDate } from "./to-date.js";
 
 /**
@@ -13,9 +14,11 @@ export function daysUntil(date: Date | string | number | null): number {
   const d = toDate(date);
   if (!d) return 0;
 
-  const today = new Date();
-  if (d <= today) return 0;
+  const target = startOfDay(d);
+  const today = startOfDay(new Date());
 
-  const timeDiff = d.getTime() - today.getTime();
-  return Math.floor(timeDiff / (1000 * 3600 * 24));
+  if (target <= today) return 0;
+
+  const diff = target.getTime() - today.getTime();
+  return Math.round(diff / (1000 * 60 * 60 * 24));
 }

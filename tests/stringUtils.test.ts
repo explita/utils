@@ -1,14 +1,12 @@
-import {
-  addOrdinal,
-  buildQueryString,
-  toTitleCase as camelToTitle,
-  capitalize,
-  chunkSplit,
-  formatCurrency,
-  parseQueryString,
-  slugify,
-  uniqueString,
-} from "../src";
+import { addOrdinal } from "../src/string/add-ordinal";
+import { buildQueryString } from "../src/string/build-query-string";
+import { toTitleCase as camelToTitle } from "../src/string/to-title-case";
+import { capitalize } from "../src/string/capitalize";
+import { chunkSplit } from "../src/string/chunk-split";
+import { formatCurrency } from "../src/string/format-currency";
+import { parseQueryString } from "../src/string/parse-query-string";
+import { slugify } from "../src/string/slugify";
+import { uniqueString } from "../src/string/unique-string";
 
 test("capitalize should capitalize the first letter", () => {
   expect(capitalize("hello")).toBe("Hello");

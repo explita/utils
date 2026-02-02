@@ -7,7 +7,6 @@ export * from "./format-currency.js";
 export * from "./hex-to-rgb.js";
 export * from "./is-empty.js";
 export * from "./is-valid-email.js";
-// export * from "./is-valid-phone";
 export * from "./is-valid-password.js";
 export * from "./nl2br.js";
 export * from "./parse-query-string.js";

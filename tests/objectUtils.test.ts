@@ -112,8 +112,8 @@ describe("jsonify", () => {
 
   test("should revive date strings", () => {
     const dateStr = "2024-01-25T14:30:00.000Z";
-    const result = jsonify({ date: dateStr });
+    const result = jsonify({ date: dateStr }) as any;
     expect(result.date).toBeInstanceOf(Date);
-    expect(result.date).toBe(dateStr);
+    expect(result.date.toISOString()).toBe(dateStr);
   });
 });

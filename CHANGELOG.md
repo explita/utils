@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-02-02
+
+### Added
+
+- **Date Utilities**: Added `startOfDay` for first-moment-of-day calculations.
+- **Misc Utilities**: Added `logger` for conditional console logging with caller stack traces in errors.
+- **String Utilities**: Added `capitalize` and `slugify` helpers (aliased to sentence and kebab case but more intuitive).
+- **Axios Utilities**: Added `tryAxios` helper exported via `@explita/utils/axios`.
+
+### Fixed
+
+- **ISO 8601 Compliance**: Updated `weekOfYear` to correctly follow the ISO 8601 standard for week numbering.
+- **Deep Merge Types**: Fixed a TypeScript structural typing issue in `deepMerge` that previously blocked adding new properties to a target object.
+- **Typo Resolution**: Renamed `hours-beween` to `hours-between` and updated all internal references.
+- **JSON Reviver**: Fixed a logic error in `jsonify` where it failed to correctly revive ISO date strings in some environments.
+- **Jest ESM Support**: Resolved critical testing issues by configuring Jest for native ESM support (`jest.config.cjs`) and enabling `--experimental-vm-modules`.
+
+### Changed
+
+- **Package Segmentation**: Moved Axios utilities to a dedicated `@explita/utils/axios` export to keep the core package light.
+- **Documentation**: Updated `README.md` to include documented missing utilities and organized the API reference into more granular sections.
+
 ## [0.1.0] - 2026-01-26
 
 ### Added

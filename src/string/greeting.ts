@@ -17,11 +17,13 @@ export function greeting(
     evening = "Good evening",
   } = opts || {};
 
+  const nameString = name ? `, ${name}` : "";
+
   if (hour < 12) {
-    return `${morning} ${name}`;
+    return `${morning}${nameString}`;
   } else if (hour < 17) {
-    return `${afternoon} ${name}`;
+    return `${afternoon}${nameString}`;
   } else {
-    return `${evening} ${name}`;
+    return `${evening}${nameString}`;
   }
 }

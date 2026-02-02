@@ -10,14 +10,25 @@ import { toDate } from "./to-date.js";
 export function weekOfYear(
   date: Date | string | number | null | undefined = new Date(),
 ): number {
-  let d = toDate(date);
+  const d = toDate(date);
   if (!d) return 0;
 
-  const start = new Date(d.getFullYear(), 0, 1);
-  const diff = d.getTime() - start.getTime();
-  const oneDay = 1000 * 60 * 60 * 24;
-  const day = Math.floor(diff / oneDay);
-  const week = Math.floor(day / 7);
+  // Create a copy to avoid mutating the original date
+  const tempDate = new Date(d.getTime());
 
-  return week + 1;
+  // ISO week date helper: Set to nearest Thursday: current date + 4 - current day number
+  // Make Sunday's day number 7
+  const dayNum = (d.getDay() + 6) % 7;
+  tempDate.setDate(tempDate.getDate() - dayNum + 3);
+
+  // Get first Thursday of year
+  const firstThursday = tempDate.getTime();
+  tempDate.setMonth(0, 1);
+  if (tempDate.getDay() !== 4) {
+    tempDate.setMonth(0, 1 + ((4 - tempDate.getDay() + 7) % 7));
+  }
+
+  return (
+    1 + Math.ceil((firstThursday - tempDate.getTime()) / (7 * 24 * 3600 * 1000))
+  );
 }

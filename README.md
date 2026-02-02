@@ -120,6 +120,7 @@ yarn add @explita/utils
 | `shiftDays`        | Adds/subtracts days.              | `shiftDays(date, 5)`                   |
 | `shiftMonths`      | Adds/subtracts months.            | `shiftMonths(date, 1)`                 |
 | `shiftYears`       | Adds/subtracts years.             | `shiftYears(date, 1)`                  |
+| `startOfDay`       | Returns first moment of day.      | `startOfDay(date)`                     |
 | `startOfMonth`     | Returns first moment of month.    | `startOfMonth(date)`                   |
 | `toDate`           | Robust conversion to Date object. | `toDate("2024-01-01")`                 |
 | `weekOfYear`       | Gets week number of the year.     | `weekOfYear(date)`                     |
@@ -168,10 +169,22 @@ yarn add @explita/utils
 | :--------- | :------------------------------ | :---------------------------- |
 | `debounce` | Limits function execution rate. | `debounce(fn, 500)`           |
 | `delay`    | Promisified timeout.            | `await delay(1000)`           |
+| `logger`   | Conditional console logging.    | `logger.info("data")`         |
 | `retry`    | Retries a failing function.     | `await retry(fn, {times: 3})` |
 | `throttle` | Limits execution frequency.     | `throttle(fn, 500)`           |
-| `tryAxios` | Optimized tryCatch for Axios.   | `tryAxios(api.get(url))`      |
 | `tryCatch` | Clean async error handling.     | `tryCatch(fetch(url))`        |
+
+---
+
+#
+
+#### 📡 Axios Utilities
+
+`import { ... } from "@explita/utils/axios"`
+
+| Function   | Description                   | Example                  |
+| :--------- | :---------------------------- | :----------------------- |
+| `tryAxios` | Optimized tryCatch for Axios. | `tryAxios(api.get(url))` |
 
 ---
 
