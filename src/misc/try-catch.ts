@@ -1,6 +1,4 @@
-type SuccessResponse<T> = readonly [T, null];
-type FailureResponse<E> = readonly [null, E];
-export type TryCatchResponse<T, E> = SuccessResponse<T> | FailureResponse<E>;
+export type TryCatchResponse<T, E> = [T, null] | [null, E];
 export type TryCatchOpts = {
   logError?: boolean;
 };
@@ -24,11 +22,11 @@ export async function tryCatch<T, E = Error>(
     const data = await (typeof promiseOrFn === "function"
       ? (promiseOrFn as () => T | Promise<T>)()
       : promiseOrFn);
-    return [data, null] as const;
+    return [data, null];
   } catch (error) {
     if (options?.logError) {
       console.error(error);
     }
-    return [null, error as E] as const;
+    return [null, error as E];
   }
 }

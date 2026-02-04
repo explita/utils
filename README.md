@@ -182,9 +182,14 @@ yarn add @explita/utils
 
 `import { ... } from "@explita/utils/axios"`
 
-| Function   | Description                   | Example                  |
-| :--------- | :---------------------------- | :----------------------- |
-| `tryAxios` | Optimized tryCatch for Axios. | `tryAxios(api.get(url))` |
+| Function   | Description                                                                     | Example                  |
+| :--------- | :------------------------------------------------------------------------------ | :----------------------- |
+| `tryAxios` | Optimized tryCatch for Axios. Includes `kind` and `meta` in the error response. | `tryAxios(api.get(url))` |
+
+**Error Properties:**
+
+- `kind`: Categorizes the error as `"network"`, `"logic"`, or `"unknown"`.
+- `meta`: Contains an error snapshot including `name`, `message`, and `stack`.
 
 ---
 
