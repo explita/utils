@@ -8,12 +8,18 @@ import { normalizeAxiosError, NormalizedAxiosError } from "./lib/utils.js";
  * @template T The type of the response data.
  * @param {Promise<T> | (() => Promise<T>)} promiseOrFn - The axios promise or thunk.
  * @param {TryCatchOpts} [options] - Optional configuration.
- * @returns {Promise<TryCatchResponse<T, NormalizedAxiosError>>}
+ * @returns {Promise<TryCatchResponse<T, NormalizedAxiosError<E>>>}
  */
-export async function tryAxios<T>(
+export async function tryAxios<
+  T,
+  E extends { message: string; errors: any; [key: string]: any } = {
+    message: string;
+    errors: any;
+  },
+>(
   promiseOrFn: Promise<T> | (() => T | Promise<T>),
   options?: TryCatchOpts,
-): Promise<TryCatchResponse<T, NormalizedAxiosError>> {
+): Promise<TryCatchResponse<T, NormalizedAxiosError<E>>> {
   try {
     const response =
       typeof promiseOrFn === "function"

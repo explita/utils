@@ -182,14 +182,16 @@ yarn add @explita/utils
 
 `import { ... } from "@explita/utils/axios"`
 
-| Function   | Description                                                                     | Example                  |
-| :--------- | :------------------------------------------------------------------------------ | :----------------------- |
-| `tryAxios` | Optimized tryCatch for Axios. Includes `kind` and `meta` in the error response. | `tryAxios(api.get(url))` |
+| Function   | Description                                                                                                                | Example                                  |
+| :--------- | :------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------- |
+| `tryAxios` | Optimized tryCatch for Axios. Supports generic error schemas and includes `kind`, `meta`, and `original` error properties. | `tryAxios<T, ErrorSchema>(api.get(url))` |
 
 **Error Properties:**
 
 - `kind`: Categorizes the error as `"network"`, `"logic"`, or `"unknown"`.
 - `meta`: Contains an error snapshot including `name`, `message`, and `stack`.
+- `original`: The raw `AxiosError` for deep inspection.
+- **Dynamic Data**: Automatically spreads the response body (e.g., `message`, `errors`) into the error object for direct access.
 
 ---
 

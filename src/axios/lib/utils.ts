@@ -2,9 +2,10 @@ import axios, { AxiosError } from "axios";
 
 export type ErrorKind = "network" | "logic" | "unknown";
 
-export type NormalizedAxiosError = AxiosError & {
+export type NormalizedAxiosError<E extends Record<string, any>> = E & {
+  original: AxiosError;
   kind: ErrorKind;
-  meta?: {
+  meta: {
     name?: string;
     message?: string;
     stack?: string;
@@ -13,26 +14,33 @@ export type NormalizedAxiosError = AxiosError & {
 
 type ErrorSnapshot = {
   name?: string;
-  message?: string;
+  message: string;
   stack?: string;
 };
 
-export function normalizeAxiosError(error: unknown): NormalizedAxiosError {
+export function normalizeAxiosError(error: unknown): NormalizedAxiosError<any> {
   if (axios.isAxiosError(error)) {
-    return Object.assign(error, {
-      kind: detectErrorKind(error),
-      meta: toErrorSnapshot(error),
-    });
+    return Object.assign(
+      {},
+      {
+        kind: detectErrorKind(error),
+        meta: toErrorSnapshot(error),
+        original: error,
+        message: error.response?.data?.message || error.message,
+        ...error.response?.data,
+      },
+    );
   }
 
-  const axiosError = new AxiosError(
+  const genericError = new AxiosError(
     error instanceof Error ? error.message : "Unknown error",
     "UNKNOWN",
   );
 
-  return Object.assign(axiosError, {
+  return Object.assign(genericError, {
     kind: detectErrorKind(error),
     meta: toErrorSnapshot(error),
+    original: error,
   });
 }
 
