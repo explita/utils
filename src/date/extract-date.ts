@@ -1,3 +1,4 @@
+import { startOfDay } from "./start-of-day.js";
 import { toDate } from "./to-date.js";
 
 /**
@@ -16,5 +17,5 @@ export function extractDate(
 
   if (!d) throw new Error("[extractDate]: Invalid date");
 
-  return d.toISOString().slice(0, 10);
+  return startOfDay(d).toISOString().slice(0, 10);
 }

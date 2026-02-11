@@ -1,23 +1,27 @@
 import { TryCatchOpts, TryCatchResponse } from "../misc/try-catch.js";
 import { normalizeAxiosError, NormalizedAxiosError } from "./lib/utils.js";
+import { AxiosResponse } from "axios";
 
 /**
  * Specialized tryCatch for Axios requests.
+ * Returns the response data directly instead of the response object.
  * Automatically casts the error to AxiosError for better IDE support.
  *
  * @template T The type of the response data.
- * @param {Promise<T> | (() => Promise<T>)} promiseOrFn - The axios promise or thunk.
+ * @param {Promise<AxiosResponse<T>> | (() => Promise<AxiosResponse<T>>)} promiseOrFn - The axios promise or thunk.
  * @param {TryCatchOpts} [options] - Optional configuration.
  * @returns {Promise<TryCatchResponse<T, NormalizedAxiosError<E>>>}
  */
 export async function tryAxios<
-  T,
+  T = any,
   E extends { message: string; errors: any; [key: string]: any } = {
     message: string;
     errors: any;
   },
 >(
-  promiseOrFn: Promise<T> | (() => T | Promise<T>),
+  promiseOrFn:
+    | Promise<AxiosResponse<T>>
+    | (() => AxiosResponse<T> | Promise<AxiosResponse<T>>),
   options?: TryCatchOpts,
 ): Promise<TryCatchResponse<T, NormalizedAxiosError<E>>> {
   try {
@@ -30,7 +34,7 @@ export async function tryAxios<
       throw new Error("Invalid axios response");
     }
 
-    return [response.data as T, null];
+    return [response.data, null];
   } catch (error) {
     if (options?.logError) {
       console.error(error);

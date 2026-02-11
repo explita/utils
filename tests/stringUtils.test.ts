@@ -6,6 +6,7 @@ import { chunkSplit } from "../src/string/chunk-split";
 import { formatCurrency } from "../src/string/format-currency";
 import { parseQueryString } from "../src/string/parse-query-string";
 import { slugify } from "../src/string/slugify";
+import { toSentenceCase } from "../src/string/to-sentence-case";
 import { uniqueString } from "../src/string/unique-string";
 
 test("capitalize should capitalize the first letter", () => {
@@ -41,6 +42,10 @@ test("chunkSplit should split a string into chunks", () => {
 
 test("uniqueString should generate a unique string", () => {
   expect(uniqueString(16, false)).toHaveLength(16);
+});
+
+test("toSentenceCase should handle uppercase snake_case", () => {
+  expect(toSentenceCase("FULL_TIME")).toBe("Full time");
 });
 
 test("formatCurrency should format amount with symbol", () => {

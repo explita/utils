@@ -6,5 +6,10 @@
  * @returns A new Date object representing the start of the day.
  */
 export function startOfDay(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  // Get local date components
+  const year = d.getFullYear();
+  const month = d.getMonth();
+  const date = d.getDate();
+  // Create UTC date with local date components
+  return new Date(Date.UTC(year, month, date, 0, 0, 0, 0));
 }

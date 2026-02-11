@@ -12,7 +12,7 @@
 export function toSentenceCase(str: string): string {
   const s = (
     str.match(
-      /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g,
+      /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b|_)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g,
     ) || []
   )
     .map((x: string) => x.toLowerCase())
