@@ -21,7 +21,7 @@ export function isFuture(
 
   if (!includeTime) {
     return (
-      new Date(d.getFullYear(), d.getMonth(), d.getDate()) >
+      new Date(d.getFullYear(), d.getMonth(), d.getDate()) >=
       new Date(today.getFullYear(), today.getMonth(), today.getDate())
     );
   }

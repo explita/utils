@@ -6,3 +6,5 @@ export * from "./omit-from.js";
 export * from "./pick-from.js";
 export * from "./prepend-to.js";
 export * from "./unflatten.js";
+export * from "./get.js";
+export * from "./compact-object.js";

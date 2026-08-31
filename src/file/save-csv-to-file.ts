@@ -10,7 +10,7 @@ export function saveCSVToFile<T extends Record<string, any>[]>(
   const filename = name.endsWith(".csv") ? name : `${name}.csv`;
 
   if (!data || data.length === 0) {
-    alert("No data to export.");
+    console.warn("No data to export.");
     return;
   }
 

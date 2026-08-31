@@ -15,7 +15,7 @@ export function findDuplicates<
   const duplicates: { _index: number; [key]: string }[] = [];
 
   data.forEach((item, index) => {
-    if (!item[key]) return;
+    if (item[key] === undefined || item[key] === null) return;
 
     const firstIndex = seen.get(item[key]);
 

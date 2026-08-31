@@ -14,168 +14,175 @@ import { getYear } from "../src/date/get-year";
 import { getMonth } from "../src/date/get-month";
 import { getDay } from "../src/date/get-day";
 import { extractDate } from "../src/date/extract-date";
+import { timeAgo } from "../src/date/time-ago";
+import { minDate } from "../src/date/min-date";
+import { maxDate } from "../src/date/max-date";
+import { startOfDay } from "../src/date/start-of-day";
+import { endOfDay } from "../src/date/end-of-day";
+import { timeUntil } from "../src/date/time-until";
+import { formatRelative } from "../src/date/format-relative";
 
-// describe("formatDate", () => {
-//   const testDate = new Date("2024-01-25T14:30:05");
+describe("formatDate", () => {
+  const testDate = new Date("2024-01-25T14:30:05");
 
-//   test("should format with default pattern (DD/MM/YYYY)", () => {
-//     expect(formatDate(testDate)).toBe("25/01/2024");
-//   });
+  test("should format with default pattern (DD/MM/YYYY)", () => {
+    expect(formatDate(testDate)).toBe("25/01/2024");
+  });
 
-//   test("should support custom token patterns", () => {
-//     expect(formatDate(testDate, "YYYY-MM-DD")).toBe("2024-01-25");
-//     expect(formatDate(testDate, "MMMM D, YYYY")).toBe("January 25, 2024");
-//     expect(formatDate(testDate, "ddd, MMM DD")).toBe("Thu, Jan 25");
-//     expect(formatDate(testDate, "YY-M-D")).toBe("24-1-25");
-//   });
+  test("should support custom token patterns", () => {
+    expect(formatDate(testDate, "YYYY-MM-DD")).toBe("2024-01-25");
+    expect(formatDate(testDate, "MMMM D, YYYY")).toBe("January 25, 2024");
+    expect(formatDate(testDate, "ddd, MMM DD")).toBe("Thu, Jan 25");
+    expect(formatDate(testDate, "YY-M-D")).toBe("24-1-25");
+  });
 
-//   test("should support escaped literals using []", () => {
-//     expect(formatDate(testDate, "[Year:] YYYY")).toBe("Year: 2024");
-//     expect(formatDate(testDate, "DD [of] MMMM")).toBe("25 of January");
-//   });
+  test("should support escaped literals using []", () => {
+    expect(formatDate(testDate, "[Year:] YYYY")).toBe("Year: 2024");
+    expect(formatDate(testDate, "DD [of] MMMM")).toBe("25 of January");
+  });
 
-//   test("should support time tokens in formatDate", () => {
-//     expect(formatDate(testDate, "YYYY-MM-DD HH:mm:ss")).toBe(
-//       "2024-01-25 14:30:05",
-//     );
-//     expect(formatDate(testDate, "h:m A")).toBe("2:30 PM");
-//   });
+  test("should support time tokens in formatDate", () => {
+    expect(formatDate(testDate, "YYYY-MM-DD HH:mm:ss")).toBe(
+      "2024-01-25 14:30:05",
+    );
+    expect(formatDate(testDate, "h:m A")).toBe("2:30 PM");
+  });
 
-//   test("should handle numeric (timestamp) input", () => {
-//     const timestamp = testDate.getTime();
-//     expect(formatDate(timestamp, "YYYY")).toBe("2024");
-//   });
+  test("should handle numeric (timestamp) input", () => {
+    const timestamp = testDate.getTime();
+    expect(formatDate(timestamp, "YYYY")).toBe("2024");
+  });
 
-//   test("should handle string input", () => {
-//     expect(formatDate("2024-12-31", "MMMM DD")).toBe("December 31");
-//   });
+  test("should handle string input", () => {
+    expect(formatDate("2024-12-31", "MMMM DD")).toBe("December 31");
+  });
 
-//   test("should handle null by using current date", () => {
-//     const now = new Date();
-//     const formatted = formatDate(null, "YYYY");
-//     expect(formatted).toBe(String(now.getFullYear()));
-//   });
+  test("should handle null by using current date", () => {
+    const now = new Date();
+    const formatted = formatDate(null, "YYYY");
+    expect(formatted).toBe(String(now.getFullYear()));
+  });
 
-//   test("should maintain backward compatibility with Month pseudo-token", () => {
-//     expect(
-//       formatDate(testDate, { format: "Month DD", monthFormat: "long" }),
-//     ).toBe("January 25");
-//     expect(
-//       formatDate(testDate, { format: "Month DD", monthFormat: "short" }),
-//     ).toBe("Jan 25");
-//   });
+  test("should maintain backward compatibility with Month pseudo-token", () => {
+    expect(
+      formatDate(testDate, { format: "Month DD", monthFormat: "long" }),
+    ).toBe("January 25");
+    expect(
+      formatDate(testDate, { format: "Month DD", monthFormat: "short" }),
+    ).toBe("Jan 25");
+  });
 
-//   test("should throw error for invalid dates", () => {
-//     expect(() => formatDate("invalid-date")).toThrow();
-//   });
-// });
+  test("should throw error for invalid dates", () => {
+    expect(() => formatDate("invalid-date")).toThrow();
+  });
+});
 
-// describe("formatTime", () => {
-//   const testDate = new Date("2024-01-25T14:30:05.123");
+describe("formatTime", () => {
+  const testDate = new Date("2024-01-25T14:30:05.123");
 
-//   test("should format with default pattern (hh:mmA)", () => {
-//     expect(formatTime(testDate)).toBe("02:30PM");
-//   });
+  test("should format with default pattern (hh:mmA)", () => {
+    expect(formatTime(testDate)).toBe("02:30PM");
+  });
 
-//   test("should support 24-hour tokens (HH, H)", () => {
-//     expect(formatTime(testDate, "HH:mm")).toBe("14:30");
-//     expect(formatTime(new Date("2024-01-25T03:05:00"), "H:m")).toBe("3:5");
-//   });
+  test("should support 24-hour tokens (HH, H)", () => {
+    expect(formatTime(testDate, "HH:mm")).toBe("14:30");
+    expect(formatTime(new Date("2024-01-25T03:05:00"), "H:m")).toBe("3:5");
+  });
 
-//   test("should support 12-hour tokens (hh, h, A, a)", () => {
-//     expect(formatTime(testDate, "h:mm a")).toBe("2:30 pm");
-//     expect(formatTime(new Date("2024-01-25T00:15:00"), "hh:mm A")).toBe(
-//       "12:15 AM",
-//     );
-//   });
+  test("should support 12-hour tokens (hh, h, A, a)", () => {
+    expect(formatTime(testDate, "h:mm a")).toBe("2:30 pm");
+    expect(formatTime(new Date("2024-01-25T00:15:00"), "hh:mm A")).toBe(
+      "12:15 AM",
+    );
+  });
 
-//   test("should support millisecond token (SSS)", () => {
-//     expect(formatTime(testDate, "HH:mm:ss.SSS")).toBe("14:30:05.123");
-//   });
+  test("should support millisecond token (SSS)", () => {
+    expect(formatTime(testDate, "HH:mm:ss.SSS")).toBe("14:30:05.123");
+  });
 
-//   test("should support escaped literals using []", () => {
-//     expect(formatTime(testDate, "[Time is] HH:mm")).toBe("Time is 14:30");
-//   });
+  test("should support escaped literals using []", () => {
+    expect(formatTime(testDate, "[Time is] HH:mm")).toBe("Time is 14:30");
+  });
 
-//   test("should handle string and number inputs", () => {
-//     expect(formatTime("2024-01-25T20:00:00", "HH:mm")).toBe("20:00");
-//     expect(formatTime(testDate.getTime(), "ss")).toBe("05");
-//   });
+  test("should handle string and number inputs", () => {
+    expect(formatTime("2024-01-25T20:00:00", "HH:mm")).toBe("20:00");
+    expect(formatTime(testDate.getTime(), "ss")).toBe("05");
+  });
 
-//   test("should throw error for invalid dates", () => {
-//     expect(() => formatTime("not a date")).toThrow();
-//   });
-// });
+  test("should throw error for invalid dates", () => {
+    expect(() => formatTime("not a date")).toThrow();
+  });
+});
 
-// describe("dayOfYear", () => {
-//   test("should return 1 for January 1st", () => {
-//     expect(dayOfYear("2024-01-01")).toBe(1);
-//   });
+describe("dayOfYear", () => {
+  test("should return 1 for January 1st", () => {
+    expect(dayOfYear("2024-01-01")).toBe(1);
+  });
 
-//   test("should handle leap years correctly", () => {
-//     expect(dayOfYear("2024-12-31")).toBe(366);
-//     expect(dayOfYear("2023-12-31")).toBe(365);
-//   });
-// });
+  test("should handle leap years correctly", () => {
+    expect(dayOfYear("2024-12-31")).toBe(366);
+    expect(dayOfYear("2023-12-31")).toBe(365);
+  });
+});
 
-// describe("daysBetween", () => {
-//   test("should return absolute difference in days", () => {
-//     expect(daysBetween("2024-01-01", "2024-01-11")).toBe(10);
-//     expect(daysBetween("2024-01-11", "2024-01-01")).toBe(10);
-//   });
+describe("daysBetween", () => {
+  test("should return absolute difference in days", () => {
+    expect(daysBetween("2024-01-01", "2024-01-11")).toBe(10);
+    expect(daysBetween("2024-01-11", "2024-01-01")).toBe(10);
+  });
 
-//   test("should return 0 for same day", () => {
-//     expect(daysBetween("2024-01-01", "2024-01-01")).toBe(0);
-//   });
-// });
+  test("should return 0 for same day", () => {
+    expect(daysBetween("2024-01-01", "2024-01-01")).toBe(0);
+  });
+});
 
-// describe("isToday", () => {
-//   test("should return true for current date", () => {
-//     expect(isToday(new Date())).toBe(true);
-//   });
+describe("isToday", () => {
+  test("should return true for current date", () => {
+    expect(isToday(new Date())).toBe(true);
+  });
 
-//   test("should return false for other dates", () => {
-//     expect(isToday("1990-01-01")).toBe(false);
-//   });
-// });
+  test("should return false for other dates", () => {
+    expect(isToday("1990-01-01")).toBe(false);
+  });
+});
 
-// describe("isPast", () => {
-//   test("should return true for past dates", () => {
-//     expect(isPast("2000-01-01")).toBe(true);
-//   });
+describe("isPast", () => {
+  test("should return true for past dates", () => {
+    expect(isPast("2000-01-01")).toBe(true);
+  });
 
-//   test("should verify includeTime option", () => {
-//     const today = new Date();
-//     const pastEarlierToday = new Date(today.getTime() - 1000); // 1 second ago
-//     expect(isPast(pastEarlierToday, { includeTime: true })).toBe(true);
-//     expect(isPast(pastEarlierToday, { includeTime: false })).toBe(false);
-//   });
-// });
+  test("should verify includeTime option", () => {
+    const today = new Date();
+    const pastEarlierToday = new Date(today.getTime() - 1000); // 1 second ago
+    expect(isPast(pastEarlierToday, true)).toBe(true);
+    expect(isPast(pastEarlierToday, false)).toBe(false);
+  });
+});
 
-// describe("isFuture", () => {
-//   test("should return true for future dates", () => {
-//     expect(isFuture("2099-01-01")).toBe(true);
-//   });
+describe("isFuture", () => {
+  test("should return true for future dates", () => {
+    expect(isFuture("2099-01-01")).toBe(true);
+  });
 
-//   test("should verify includeTime option", () => {
-//     const today = new Date();
-//     const futureLaterToday = new Date(today.getTime() + 1000); // 1 second from now
-//     expect(isFuture(futureLaterToday, { includeTime: true })).toBe(true);
-//     expect(isFuture(futureLaterToday, { includeTime: false })).toBe(false);
-//   });
-// });
+  test("should verify includeTime option", () => {
+    const today = new Date();
+    const futureLaterToday = new Date(today.getTime() + 1000); // 1 second from now
+    expect(isFuture(futureLaterToday, true)).toBe(true);
+    expect(isFuture(futureLaterToday, false)).toBe(true);
+  });
+});
 
-// describe("daysSince", () => {
-//   test("should return positive number for past dates", () => {
-//     const yesterday = new Date();
-//     yesterday.setDate(yesterday.getDate() - 1);
-//     expect(daysSince(yesterday)).toBe(1);
-//   });
+describe("daysSince", () => {
+  test("should return positive number for past dates", () => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    expect(daysSince(yesterday)).toBe(1);
+  });
 
-//   test("should return 0 for future dates", () => {
-//     expect(daysSince("2099-01-01")).toBe(0);
-//   });
-// });
+  test("should return 0 for future dates", () => {
+    expect(daysSince("2099-01-01")).toBe(0);
+  });
+});
 
 describe("daysUntil", () => {
   test("should return positive number for future dates", () => {
@@ -189,57 +196,118 @@ describe("daysUntil", () => {
   });
 });
 
-// describe("daysInMonth", () => {
-//   test("should return correct number of days for various months", () => {
-//     expect(daysInMonth("2024-02-01")).toBe(29); // Leap
-//     expect(daysInMonth("2023-02-01")).toBe(28); // Not leap
-//     expect(daysInMonth("2024-01-01")).toBe(31);
-//     expect(daysInMonth("2024-04-01")).toBe(30);
-//   });
-// });
+describe("daysInMonth", () => {
+  test("should return correct number of days for various months", () => {
+    expect(daysInMonth("2024-02-01")).toBe(29); // Leap
+    expect(daysInMonth("2023-02-01")).toBe(28); // Not leap
+    expect(daysInMonth("2024-01-01")).toBe(31);
+    expect(daysInMonth("2024-04-01")).toBe(30);
+  });
+});
 
-// describe("startOfMonth", () => {
-//   test("should return first day of month at 00:00:00", () => {
-//     const result = startOfMonth("2024-01-25");
-//     expect(result.getFullYear()).toBe(2024);
-//     expect(result.getMonth()).toBe(0);
-//     expect(result.getDate()).toBe(1);
-//     expect(result.getHours()).toBe(0);
-//     expect(result.getMinutes()).toBe(0);
-//   });
-// });
+describe("startOfMonth", () => {
+  test("should return first day of month at 00:00:00", () => {
+    const result = startOfMonth("2024-01-25");
+    expect(result.getFullYear()).toBe(2024);
+    expect(result.getMonth()).toBe(0);
+    expect(result.getDate()).toBe(1);
+    expect(result.getHours()).toBe(0);
+    expect(result.getMinutes()).toBe(0);
+  });
+});
 
-// describe("endOfMonth", () => {
-//   test("should return last moment of the month", () => {
-//     const result = endOfMonth("2024-01-25");
-//     expect(result.getFullYear()).toBe(2024);
-//     expect(result.getMonth()).toBe(0);
-//     expect(result.getDate()).toBe(31);
-//     expect(result.getHours()).toBe(23);
-//     expect(result.getMinutes()).toBe(59);
-//     expect(result.getSeconds()).toBe(59);
-//     expect(result.getMilliseconds()).toBe(999);
-//   });
-// });
+describe("endOfMonth", () => {
+  test("should return last moment of the month", () => {
+    const result = endOfMonth("2024-01-25");
+    expect(result.getFullYear()).toBe(2024);
+    expect(result.getMonth()).toBe(0);
+    expect(result.getDate()).toBe(31);
+    expect(result.getHours()).toBe(23);
+    expect(result.getMinutes()).toBe(59);
+    expect(result.getSeconds()).toBe(59);
+    expect(result.getMilliseconds()).toBe(999);
+  });
+});
 
-// describe("getYear/Month/Day", () => {
-//   const testDate = "2024-01-25";
+describe("getYear/Month/Day", () => {
+  const testDate = "2024-01-25";
 
-//   test("getYear should return 2024", () => {
-//     expect(getYear(testDate)).toBe(2024);
-//   });
+  test("getYear should return 2024", () => {
+    expect(getYear(testDate)).toBe(2024);
+  });
 
-//   test("getMonth should return 1", () => {
-//     expect(getMonth(testDate)).toBe(1);
-//   });
+  test("getMonth should return 1", () => {
+    expect(getMonth(testDate)).toBe(1);
+  });
 
-//   test("getDay should return 25", () => {
-//     expect(getDay(testDate)).toBe(25);
-//   });
-// });
+  test("getDay should return 25", () => {
+    expect(getDay(testDate)).toBe(25);
+  });
+});
 
-// describe("extractDate", () => {
-//   test("should return YYYY-MM-DD string", () => {
-//     expect(extractDate(new Date("2024-01-25T14:30:00"))).toBe("2024-01-25");
-//   });
-// });
+describe("extractDate", () => {
+  test("should return YYYY-MM-DD string", () => {
+    expect(extractDate(new Date("2024-01-25T14:30:00"))).toBe("2024-01-25");
+  });
+});
+
+describe("timeAgo", () => {
+  test("should handle Date, string, and timestamp numbers", () => {
+    const pastTenSec = new Date(Date.now() - 10000);
+    expect(timeAgo(pastTenSec)).toBe("a few seconds ago");
+    expect(timeAgo(pastTenSec.getTime())).toBe("a few seconds ago");
+    expect(timeAgo(pastTenSec.toISOString())).toBe("a few seconds ago");
+  });
+
+  test("should handle slight clock skew gracefully", () => {
+    const slightFuture = new Date(Date.now() + 2000); // 2 seconds in the future
+    expect(timeAgo(slightFuture)).toBe("a few seconds ago");
+  });
+});
+
+describe("minDate and maxDate", () => {
+  const d1 = "2024-01-01";
+  const d2 = new Date("2024-06-01");
+  const d3 = new Date("2024-12-31").getTime();
+
+  test("minDate returns the earliest date", () => {
+    expect(minDate([d1, d2, d3])?.toISOString().slice(0, 10)).toBe("2024-01-01");
+    expect(minDate([])).toBeNull();
+  });
+
+  test("maxDate returns the latest date", () => {
+    expect(maxDate([d1, d2, d3])?.toISOString().slice(0, 10)).toBe("2024-12-31");
+    expect(maxDate([])).toBeNull();
+  });
+});
+
+describe("startOfDay and endOfDay", () => {
+  test("startOfDay should set time to 00:00:00.000", () => {
+    const d = startOfDay(new Date("2024-05-15T18:30:45"));
+    expect(d.getHours()).toBe(0);
+    expect(d.getMinutes()).toBe(0);
+    expect(d.getSeconds()).toBe(0);
+    expect(d.getMilliseconds()).toBe(0);
+  });
+
+  test("endOfDay should set time to 23:59:59.999", () => {
+    const d = endOfDay(new Date("2024-05-15T18:30:45"));
+    expect(d.getHours()).toBe(23);
+    expect(d.getMinutes()).toBe(59);
+    expect(d.getSeconds()).toBe(59);
+    expect(d.getMilliseconds()).toBe(999);
+  });
+});
+
+describe("timeUntil and formatRelative", () => {
+  test("timeUntil should return relative time for future date", () => {
+    const future = new Date(Date.now() + 120000); // 2 mins
+    expect(timeUntil(future)).toBe("in 2 minutes");
+  });
+
+  test("formatRelative should format contextual strings", () => {
+    const now = new Date();
+    expect(formatRelative(now)).toMatch(/^Today at /);
+  });
+});
+

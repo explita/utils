@@ -13,9 +13,9 @@
  * @returns {string} The formatted currency string.
  */
 export function formatCurrency(amount: number, currency: string = ""): string {
-  if (!amount) return `${currency}0`;
+  const num = typeof amount === "number" && !isNaN(amount) ? amount : 0;
 
-  return `${currency}${amount.toLocaleString("en-US", {
+  return `${currency}${num.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;

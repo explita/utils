@@ -1,4 +1,3 @@
-import { startOfDay } from "./start-of-day.js";
 import { toDate } from "./to-date.js";
 
 /**
@@ -17,5 +16,9 @@ export function extractDate(
 
   if (!d) throw new Error("[extractDate]: Invalid date");
 
-  return startOfDay(d).toISOString().slice(0, 10);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }

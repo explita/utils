@@ -1,6 +1,6 @@
 {
   "name": "@explita/utils",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "explita",
   "license": "MIT",
   "type": "module",
@@ -31,6 +31,14 @@
       "default": "./dist/axios/index.js"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/explita/utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/explita/utils/issues"
+  },
+  "homepage": "https://utils.explita.ng",
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && tsc",

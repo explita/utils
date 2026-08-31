@@ -43,3 +43,8 @@ export * from "./time-ago.js";
 export * from "./to-date.js";
 export * from "./week-of-year.js";
 export * from "./start-of-day.js";
+export * from "./end-of-day.js";
+export * from "./min-date.js";
+export * from "./max-date.js";
+export * from "./time-until.js";
+export * from "./format-relative.js";

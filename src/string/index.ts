@@ -22,3 +22,6 @@ export * from "./to-title-case.js";
 export * from "./unique-string.js";
 export * from "./truncate-email.js";
 export * from "./greeting.js";
+export * from "./truncate.js";
+export * from "./mask.js";
+export * from "./pluralize.js";

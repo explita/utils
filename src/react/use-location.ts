@@ -28,6 +28,11 @@ export function useLocation() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (typeof window === "undefined" || typeof navigator === "undefined" || !("geolocation" in navigator)) {
+      setError("Geolocation is not supported");
+      return;
+    }
+
     const success = (position: GeolocationPosition) => {
       const { latitude, longitude } = position.coords;
       setLocation({ latitude, longitude });
@@ -48,13 +53,18 @@ export function useLocation() {
    * with the error message. The request uses high accuracy mode.
    */
   const requestLocationPermission = () => {
+    if (typeof window === "undefined" || typeof navigator === "undefined" || !("geolocation" in navigator)) {
+      setError("Geolocation is not supported");
+      return;
+    }
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
         setLocation({ latitude, longitude });
       },
       (error) => setError(error.message),
-      { enableHighAccuracy: true }
+      { enableHighAccuracy: true },
     );
   };
 

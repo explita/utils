@@ -6,6 +6,8 @@ import { unflattenObject } from "../src/object/unflatten";
 import { flattenObject } from "../src/object/flatten";
 import { isObject } from "../src/object/is-object";
 import { jsonify } from "../src/object/jsonify";
+import { get } from "../src/object/get";
+import { compactObject } from "../src/object/compact-object";
 
 describe("unflattenObject", () => {
   test("should transform a nested object into a flat object", () => {
@@ -117,3 +119,20 @@ describe("jsonify", () => {
     expect(result.date.toISOString()).toBe(dateStr);
   });
 });
+
+describe("get", () => {
+  test("should get nested properties by dot path", () => {
+    const obj = { user: { profile: { name: "Alice" } } };
+    expect(get(obj, "user.profile.name")).toBe("Alice");
+    expect(get(obj, "user.unknown.key", "fallback")).toBe("fallback");
+  });
+});
+
+describe("compactObject", () => {
+  test("should remove null and undefined values", () => {
+    const obj = { a: 1, b: null, c: undefined, d: "text", e: 0 };
+    expect(compactObject(obj)).toEqual({ a: 1, d: "text", e: 0 });
+    expect(compactObject({ a: "", b: "ok" }, { removeEmptyStrings: true })).toEqual({ b: "ok" });
+  });
+});
+

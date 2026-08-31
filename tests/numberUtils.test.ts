@@ -1,6 +1,9 @@
 import { randomNumber } from "../src/number/random";
 import { isNumeric } from "../src/number/is-numeric";
 import { percentage } from "../src/number/percentage";
+import { clamp } from "../src/number/clamp";
+import { formatCompactNumber } from "../src/number/format-compact-number";
+import { range } from "../src/number/range";
 
 describe("randomNumber", () => {
   test("should generate a random number with the specified length", () => {
@@ -57,3 +60,27 @@ describe("percentage", () => {
     expect(percentage(100, 0)).toBe(0);
   });
 });
+
+describe("clamp", () => {
+  test("should clamp values within bounds", () => {
+    expect(clamp(10, 0, 5)).toBe(5);
+    expect(clamp(-5, 0, 5)).toBe(0);
+    expect(clamp(3, 0, 5)).toBe(3);
+  });
+});
+
+describe("formatCompactNumber", () => {
+  test("should format compact numbers", () => {
+    expect(formatCompactNumber(1200)).toBe("1.2K");
+    expect(formatCompactNumber(1500000)).toBe("1.5M");
+  });
+});
+
+describe("range", () => {
+  test("should generate number ranges", () => {
+    expect(range(1, 5)).toEqual([1, 2, 3, 4, 5]);
+    expect(range(0, 6, 2)).toEqual([0, 2, 4, 6]);
+    expect(range(3)).toEqual([0, 1, 2, 3]);
+  });
+});
+

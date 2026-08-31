@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-08-31
+
+### Added
+
+- **React Hooks**:
+  - `useClipboard`: Auto-resetting clipboard copy with customizable feedback timer.
+  - `useOnClickOutside`: Detects clicks and touches outside a referenced element.
+  - `useMediaQuery`: Reactive CSS media query evaluator.
+  - `useIntersectionObserver`: Viewport intersection detector with `freezeOnceVisible` support.
+  - `usePrevious`: Tracks the previous value of state or props across renders.
+  - `useIsMounted`: Prevents setting state on unmounted components after async tasks.
+- **Date Utilities**:
+  - `endOfDay`: Calculates the last moment of the day (`23:59:59.999` local).
+  - `timeUntil`: Human-readable countdown for future dates (e.g., `"in 2 hours"`).
+  - `formatRelative`: Relative day formatting (e.g., `"Today at 2:30PM"`).
+- **Array Utilities**:
+  - `keyBy`: Indexes an array of objects into a lookup dictionary keyed by property.
+  - `sortBy`: Non-mutating multi-type array sort by key or getter with `"asc"` / `"desc"`.
+  - `partition`: Splits an array into `[passed, failed]` in a single pass.
+  - `intersection`: Returns common unique elements across multiple arrays.
+  - `difference`: Returns elements from the first array not present in other arrays.
+- **Number Utilities**:
+  - `clamp`: Restricts numbers within minimum and maximum bounds.
+  - `formatCompactNumber`: Formats large numbers into compact notation (`1.2K`, `3.4M`, `8.9B`).
+  - `range`: Generates sequential number arrays with custom step support.
+- **String Utilities**:
+  - `truncate`: Word-boundary aware text truncation with custom ellipsis.
+  - `mask`: Masks sensitive string characters (phone numbers, card numbers, secrets).
+  - `pluralize`: Pluralizes nouns based on count with built-in English rules.
+- **Object Utilities**:
+  - `get`: Safe dot-path deep property getter with fallback default value support.
+  - `compactObject`: Cleans `null`, `undefined`, and optional empty strings from objects.
+- **Misc Utilities**:
+  - `timeout`: Promise timeout deadline wrapper that rejects on exceeded duration.
+  - `memoize`: High-performance function memoization with custom key resolvers and `.cache` exposure.
+
+### Fixed
+
+- **SSR Safety**: Resolved `ReferenceError: navigator is not defined` in `useNetwork` and `useLocation` during server-side rendering in Next.js/Remix.
+- **Date Comparisons**:
+  - `isFuture` & `isPast`: Fixed date-only comparisons (`includeTime: false`) to properly preserve the active day until midnight.
+  - `timeAgo`: Handled slight server clock skew/drift (< 60s) gracefully as `"a few seconds ago"` instead of throwing an error.
+  - `startOfDay`: Fixed timezone offset bug where local dates were shifted into UTC.
+  - `extractDate`: Fixed timezone bug where `.toISOString()` caused dates near midnight to shift calendar days.
+  - `minDate` & `maxDate`: Added guards for empty arrays and non-Date timestamp inputs.
+- **Object & String Fixes**:
+  - `isObject`: Restricted to plain objects using `Object.prototype.toString` to preserve `Date`, `RegExp`, `Map`, and `Set` in `deepMerge`.
+  - `findDuplicates`: Fixed bug ignoring falsy values (`0`, `false`, `""`).
+  - `toTitleCase`: Lowercased word remainder to handle all-caps inputs properly.
+  - `formatCurrency`: Ensured `0` formats with two decimal places (`$0.00`).
+  - `parseQueryString`: Supported URLs both with and without `?`.
+  - `isEmpty`: Added safe handling for `Date`, `RegExp`, `Map`, and `Set`.
+  - `saveCSVToFile` & `saveXMLToFile`: Replaced blocking browser `alert()` with safe `console.warn`.
+
+### Changed
+
+- **Documentation**: Revamped entire Nextra documentation site (`packages/utils/docs`) with categorized sections, real-world code examples, TypeScript signatures, and Pagefind search indexing.
+
 ## [0.2.0] - 2026-02-06
 
 ### Changed

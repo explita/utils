@@ -8,6 +8,9 @@ import { parseQueryString } from "../src/string/parse-query-string";
 import { slugify } from "../src/string/slugify";
 import { toSentenceCase } from "../src/string/to-sentence-case";
 import { uniqueString } from "../src/string/unique-string";
+import { truncate } from "../src/string/truncate";
+import { mask } from "../src/string/mask";
+import { pluralize } from "../src/string/pluralize";
 
 test("capitalize should capitalize the first letter", () => {
   expect(capitalize("hello")).toBe("Hello");
@@ -51,3 +54,19 @@ test("toSentenceCase should handle uppercase snake_case", () => {
 test("formatCurrency should format amount with symbol", () => {
   expect(formatCurrency(1234.56, "$")).toBe("$1,234.56");
 });
+
+test("truncate should truncate string at word boundary", () => {
+  expect(truncate("The quick brown fox jumps", 15)).toBe("The quick...");
+  expect(truncate("Short", 10)).toBe("Short");
+});
+
+test("mask should mask sensitive characters", () => {
+  expect(mask("1234567890", { start: 2, end: 2, char: "*" })).toBe("12******90");
+});
+
+test("pluralize should handle singular and plural nouns", () => {
+  expect(pluralize(1, "apple")).toBe("1 apple");
+  expect(pluralize(3, "apple")).toBe("3 apples");
+  expect(pluralize(2, "person", "people")).toBe("2 people");
+});
+

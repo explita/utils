@@ -2,7 +2,7 @@
  * Chunks an array into smaller arrays of the specified size.
  *
  * @example
- * chunk([1, 2, 3, 4, 5], 2) // [[1, 2], [3, 4], [5]]
+ * chunkArray([1, 2, 3, 4, 5], 2) // [[1, 2], [3, 4], [5]]
  */
 export function chunk<T>(array: T[], size: number): T[][] {
   if (!Array.isArray(array)) {
@@ -20,3 +20,6 @@ export function chunk<T>(array: T[], size: number): T[][] {
 
   return result;
 }
+
+export const chunkArray = chunk;
+

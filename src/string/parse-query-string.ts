@@ -5,6 +5,7 @@
  * @returns An object where each key-value pair represents a parameter from the query string.
  */
 export const parseQueryString = (url: string): Record<string, string> => {
-  const queryString = url.split("?")[1];
+  if (!url) return {};
+  const queryString = url.includes("?") ? url.split("?")[1] : url;
   return Object.fromEntries(new URLSearchParams(queryString));
 };

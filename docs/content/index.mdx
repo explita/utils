@@ -1,0 +1,98 @@
+---
+sidebar_position: 1
+title: Introduction & Quick Start
+---
+
+# Introduction
+
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6.svg)](https://www.typescriptlang.org/)
+
+**@explita/utils** is a lightweight, versatile collection of TypeScript utility functions and React hooks designed for everyday development. Streamline your Node.js, React, and Next.js projects with well-organized helpers for strings, objects, dates, arrays, and more.
+
+---
+
+## Features
+
+- **String Manipulation**: Formatting, casing, slugifying, validation, and color conversion.
+- **Object Transformation**: Deep merge, flatten/unflatten, pick/omit, and key prefixing.
+- **Date Utilities**: Formatting, shifting, comparing, and relative time helpers.
+- **Array Utilities**: Chunking, deduplication, grouping, and shuffling.
+- **React Hooks**: `useList`, `useLocalStorage` (cross-tab sync), `useDisclosure`, `useWindowSize`, and more.
+- **File Export**: Save data as CSV, XML, or JSON directly from the browser.
+- **Type Safety**: Built with TypeScript from the ground up.
+
+---
+
+## Installation
+
+```bash
+npm install @explita/utils
+```
+
+```bash
+pnpm add @explita/utils
+```
+
+```bash
+yarn add @explita/utils
+```
+
+---
+
+## Quick Start
+
+```typescript
+import { capitalize, slugify, formatDate, deepMerge } from "@explita/utils";
+import { useList, useLocalStorage } from "@explita/utils/react";
+
+// String helpers
+capitalize("hello"); // "Hello"
+slugify("Hello World!"); // "hello-world"
+
+// Date helpers
+formatDate(new Date(), "YYYY-MM-DD"); // "2026-06-17"
+
+// Object helpers
+deepMerge({ a: 1 }, { b: 2 }); // { a: 1, b: 2 }
+
+// React hooks
+function App() {
+  const [items, { append, remove }] = useList(["Task 1"]);
+  const [theme, setTheme] = useLocalStorage("theme", "dark");
+  // ...
+}
+```
+
+---
+
+## Documentation
+
+import { Cards } from "nextra/components";
+
+<Cards num={3}>
+  <Cards.Card title="String Utilities" href="/docs/string-utilities" />
+  <Cards.Card title="Object Utilities" href="/docs/object-utilities" />
+  <Cards.Card title="Date Utilities" href="/docs/date-utilities" />
+  <Cards.Card title="Number & Array Utilities" href="/docs/number-and-array-utilities" />
+  <Cards.Card title="React Hooks" href="/docs/react-hooks" />
+  <Cards.Card title="Advanced Utilities" href="/docs/advanced-utilities" />
+  <Cards.Card title="API Reference" href="/docs/api-reference" />
+</Cards>
+
+---
+
+## Support the Mission
+
+@explita/utils is built to save developers time with everyday utilities. If it has helped you, please consider supporting the project!
+
+- **[Sponsor on GitHub](https://github.com/sponsors/explita)**
+- **[Buy Me A Coffee](https://ko-fi.com/explita)**
+- **Give us a ⭐** — It helps others discover the project.
+- **Report [bugs](https://github.com/explita/utils/issues)** or suggest new [features](https://github.com/explita/utils/discussions).
+
+---
+
+## License
+
+MIT © [Explita](https://github.com/explita)

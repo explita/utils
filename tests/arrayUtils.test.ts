@@ -4,6 +4,11 @@ import { groupBy } from "../src/array/group-by-key";
 import { shuffleArray } from "../src/array/shuffle";
 import { uniqueArrayByKey } from "../src/array/unique-by-key";
 import { uniqueArray } from "../src/array/unique";
+import { keyBy } from "../src/array/key-by";
+import { sortBy } from "../src/array/sort-by";
+import { partition } from "../src/array/partition";
+import { intersection } from "../src/array/intersection";
+import { difference } from "../src/array/difference";
 
 describe("uniqueArray", () => {
   test("should remove duplicate elements", () => {
@@ -100,3 +105,43 @@ describe("groupBy", () => {
     });
   });
 });
+
+describe("keyBy", () => {
+  test("should map array to object indexed by key", () => {
+    const input = [
+      { id: "a", name: "Alice" },
+      { id: "b", name: "Bob" },
+    ];
+    expect(keyBy(input, "id")).toEqual({
+      a: { id: "a", name: "Alice" },
+      b: { id: "b", name: "Bob" },
+    });
+  });
+});
+
+describe("sortBy", () => {
+  test("should sort array by key and iteratee function", () => {
+    const users = [{ age: 30 }, { age: 10 }, { age: 20 }];
+    expect(sortBy(users, "age")).toEqual([{ age: 10 }, { age: 20 }, { age: 30 }]);
+    expect(sortBy(users, (u) => u.age, "desc")).toEqual([{ age: 30 }, { age: 20 }, { age: 10 }]);
+  });
+});
+
+describe("partition", () => {
+  test("should split array based on predicate", () => {
+    const [evens, odds] = partition([1, 2, 3, 4, 5, 6], (n) => n % 2 === 0);
+    expect(evens).toEqual([2, 4, 6]);
+    expect(odds).toEqual([1, 3, 5]);
+  });
+});
+
+describe("intersection and difference", () => {
+  test("intersection should return common elements", () => {
+    expect(intersection([1, 2, 3], [2, 3, 4])).toEqual([2, 3]);
+  });
+
+  test("difference should return distinct elements from first array", () => {
+    expect(difference([1, 2, 3, 4], [2, 4])).toEqual([1, 3]);
+  });
+});
+

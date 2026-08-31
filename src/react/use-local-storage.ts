@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 /**
  * useLocalStorage
@@ -10,8 +10,20 @@ import { useState, useEffect, useCallback } from "react";
  * @param options An object with the following optional properties:
  *   - serialize: A function to serialize the state. Defaults to JSON.stringify.
  *   - deserialize: A function to deserialize the state. Defaults to JSON.parse.
- * @returns A tuple with the stored value and a function to update the stored value.
+ * @returns An object with the stored value, a setter function, and a remove function.
  */
+export type UseLocalStorageReturn<T> = {
+  /** The stored value read from localStorage. */
+  value: T;
+  /**
+   * Update the stored value in localStorage.
+   * Accepts either a direct value or a function that receives the previous value.
+   */
+  setValue: (value: T | ((prev: T) => T)) => void;
+  /** Remove the key from localStorage and reset to the initial value. */
+  remove: () => void;
+} & [T, (value: T | ((prev: T) => T)) => void, () => void];
+
 export function useLocalStorage<T>(
   key: string,
   initialValue: T,
@@ -19,7 +31,7 @@ export function useLocalStorage<T>(
     serialize?: (value: T) => string;
     deserialize?: (value: string) => T;
   },
-) {
+): UseLocalStorageReturn<T> {
   const { serialize = JSON.stringify, deserialize = JSON.parse } =
     options || {};
 
@@ -39,16 +51,25 @@ export function useLocalStorage<T>(
 
   const [storedValue, setStoredValue] = useState<T>(readValue);
 
+  // Keep a ref to the latest storedValue to avoid stale closures
+  // in the functional updater pattern
+  const storedValueRef = useRef(storedValue);
+  storedValueRef.current = storedValue;
+
   const setValue = useCallback(
     (value: T | ((prev: T) => T)) => {
       if (typeof window === "undefined") {
         console.warn(
           `Tried setting localStorage key “${key}” even though environment is not a client`,
         );
+        return;
       }
 
       try {
-        const newValue = value instanceof Function ? value(storedValue) : value;
+        const newValue =
+          typeof value === "function"
+            ? (value as (prev: T) => T)(storedValueRef.current)
+            : value;
         window.localStorage.setItem(key, serialize(newValue));
         setStoredValue(newValue);
 
@@ -58,38 +79,58 @@ export function useLocalStorage<T>(
         console.warn(`Error setting localStorage key “${key}”:`, error);
       }
     },
-    [key, serialize, storedValue],
+    [key, serialize],
   );
 
-  useEffect(() => {
-    setStoredValue(readValue());
-  }, [readValue]);
+  // Keep refs for the event listener so it never needs to re-attach
+  const keyRef = useRef(key);
+  keyRef.current = key;
+  const readValueRef = useRef(readValue);
+  readValueRef.current = readValue;
 
   useEffect(() => {
-    const handleStorageChange = (event: StorageEvent | CustomEvent) => {
-      if ((event as StorageEvent).key && (event as StorageEvent).key !== key) {
+    const handleStorageChange = (event: Event) => {
+      if (
+        (event as StorageEvent).key &&
+        (event as StorageEvent).key !== keyRef.current
+      ) {
         return;
       }
-      setStoredValue(readValue());
+      setStoredValue(readValueRef.current());
     };
 
-    window.addEventListener("storage", handleStorageChange as EventListener);
-    window.addEventListener(
-      "local-storage",
-      handleStorageChange as EventListener,
-    );
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("local-storage", handleStorageChange);
 
     return () => {
-      window.removeEventListener(
-        "storage",
-        handleStorageChange as EventListener,
-      );
-      window.removeEventListener(
-        "local-storage",
-        handleStorageChange as EventListener,
-      );
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("local-storage", handleStorageChange);
     };
-  }, [key, readValue]);
+  }, []);
 
-  return [storedValue, setValue] as const;
+  /**
+   * Remove
+   */
+  const remove = useCallback(() => {
+    if (typeof window === "undefined") {
+      console.warn(
+        `Tried removing localStorage key "${key}" even though environment is not a client`,
+      );
+      return;
+    }
+
+    try {
+      window.localStorage.removeItem(key);
+      setStoredValue(initialValue);
+      window.dispatchEvent(new Event("local-storage"));
+    } catch (error) {
+      console.warn(`Error removing localStorage key "${key}":`, error);
+    }
+  }, [key, initialValue]);
+
+  return Object.assign([storedValue, setValue, remove], {
+    value: storedValue,
+    setValue,
+    remove,
+  }) as UseLocalStorageReturn<T>;
 }

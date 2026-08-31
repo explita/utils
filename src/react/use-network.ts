@@ -5,7 +5,7 @@ type NetworkData = {
   rtt?: number;
   downlink?: number;
   downlinkMax?: number;
-  effectiveType?: "slow-2g" | "2g" | "3g" | "4g";
+  effectiveType?: "slow-2g" | "2g" | "3g" | "4g" | "unknown";
   saveData?: boolean;
   networkType?:
     | "bluetooth"
@@ -53,39 +53,61 @@ type NetworkData = {
  * @returns {NetworkData} an object with the current network information.
  */
 
-export function useNetwork() {
-  const connection =
+function getConnection(): any {
+  if (typeof navigator === "undefined") return undefined;
+  return (
     (navigator as any).connection ||
     (navigator as any).mozConnection ||
-    (navigator as any).webkitConnection;
+    (navigator as any).webkitConnection
+  );
+}
 
-  const getNetworkData = (): NetworkData => ({
-    online: navigator.onLine,
+function getNetworkData(): NetworkData {
+  if (typeof window === "undefined" || typeof navigator === "undefined") {
+    return {
+      online: true,
+      downlink: 0,
+      effectiveType: "unknown",
+    };
+  }
+
+  const connection = getConnection();
+
+  return {
+    online: typeof navigator.onLine === "boolean" ? navigator.onLine : true,
     rtt: connection ? connection.rtt : undefined,
     downlink: connection ? connection.downlink : 0,
     downlinkMax: connection ? connection.downlinkMax : undefined,
     effectiveType: connection ? connection.effectiveType : "unknown",
     saveData: connection ? connection.saveData : undefined,
     networkType: connection ? connection.type : undefined,
-  });
+  };
+}
 
-  const [networkInfo, setNetworkInfo] = useState(getNetworkData());
+export function useNetwork() {
+  const [networkInfo, setNetworkInfo] = useState<NetworkData>(() =>
+    getNetworkData(),
+  );
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const connection = getConnection();
+
     function updateNetworkInfo() {
       setNetworkInfo(getNetworkData());
     }
 
     window.addEventListener("online", updateNetworkInfo);
     window.addEventListener("offline", updateNetworkInfo);
-    connection?.addEventListener("change", updateNetworkInfo);
+    connection?.addEventListener?.("change", updateNetworkInfo);
 
     return () => {
       window.removeEventListener("online", updateNetworkInfo);
       window.removeEventListener("offline", updateNetworkInfo);
-      connection?.removeEventListener("change", updateNetworkInfo);
+      connection?.removeEventListener?.("change", updateNetworkInfo);
     };
-  }, [connection]);
+  }, []);
 
   return networkInfo;
 }

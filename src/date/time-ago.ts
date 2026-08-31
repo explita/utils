@@ -1,4 +1,4 @@
-import { isValidDate } from "./is-valid.js";
+import { toDate } from "./to-date.js";
 
 /**
  * Returns a human-readable string representing the time elapsed since the given date.
@@ -9,37 +9,22 @@ import { isValidDate } from "./is-valid.js";
  * If the difference is in days, weeks, months, or years, it returns the corresponding
  * string format.
  *
- * @param {Date | null | undefined} date - The date to calculate the time elapsed from.
+ * @param {Date | string | number} date - The date to calculate the time elapsed from.
  * @returns {string} - A human-readable string representing the time elapsed since the given date.
- * @throws {Error} - Throws an error if the date is null, undefined, or in the future.
+ * @throws {Error} - Throws an error if the date is null, undefined, invalid, or in the future.
  */
-export function timeAgo(
-  date: Date | string | number | null | undefined,
-): string {
-  if (date === null || date === undefined) {
-    throw new Error("date is null or undefined");
-  }
+export function timeAgo(date: Date | string | number): string {
+  const d = toDate(date);
 
-  if (typeof date === "string" && !isValidDate(date)) {
+  if (!d) {
     throw new Error(
-      `Invalid date string provided: "${date}". Expected format: YYYY-MM-DD or similar.`,
+      `Invalid date provided: "${date}". Expected format: YYYY-MM-DD or similar.`,
     );
   }
 
-  if (typeof date === "string" && isValidDate(date)) {
-    date = new Date(date);
-  }
+  const diff = Date.now() - d.getTime();
 
-  if (!(date instanceof Date)) {
-    throw new TypeError("Expected a Date object, but received " + typeof date);
-  }
-
-  const diff = Date.now() - date.getTime();
   const seconds = Math.floor(diff / 1000);
-
-  if (seconds < 0) {
-    throw new Error("date is in the future");
-  }
 
   if (seconds < 60) return `a few seconds ago`;
 

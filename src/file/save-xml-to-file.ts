@@ -8,7 +8,7 @@ export function saveXMLToFile<T extends Record<string, any>[]>(
   name: string,
 ) {
   if (!data || data.length === 0) {
-    alert("No data to export.");
+    console.warn("No data to export.");
     return;
   }
 

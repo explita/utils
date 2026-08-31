@@ -1,4 +1,4 @@
-import { isEmpty, isValidEmail, delay, tryCatch } from "../src";
+import { isEmpty, isValidEmail, delay, tryCatch, timeout, memoize } from "../src";
 
 describe("isEmpty", () => {
   test("should return true for null", () => {
@@ -25,16 +25,6 @@ describe("isEmpty", () => {
     expect(isEmpty([])).toBe(true);
   });
 });
-
-// describe("isValidPhone", () => {
-//   test("should return true for a valid phone number", () => {
-//     expect(isValidPhone("+1 1234567")).toBe(true);
-//   });
-
-//   test("should return false for an invalid phone number", () => {
-//     expect(isValidPhone("abc")).toBe(false);
-//   });
-// });
 
 describe("isValidEmail", () => {
   test("should return true for a valid email address", () => {
@@ -68,4 +58,24 @@ describe("misc utilities", () => {
     expect(error).toBeInstanceOf(Error);
     expect((error as Error).message).toBe("failure");
   });
+
+  test("timeout should reject if promise takes too long", async () => {
+    const slowPromise = new Promise((resolve) => setTimeout(resolve, 200));
+    await expect(timeout(slowPromise, 50)).rejects.toThrow("Operation timed out");
+  });
+
+  test("memoize should cache function outputs", () => {
+    let callCount = 0;
+    const double = memoize((x: number) => {
+      callCount++;
+      return x * 2;
+    });
+
+    expect(double(5)).toBe(10);
+    expect(double(5)).toBe(10);
+    expect(callCount).toBe(1);
+    expect(double(6)).toBe(12);
+    expect(callCount).toBe(2);
+  });
 });
+
